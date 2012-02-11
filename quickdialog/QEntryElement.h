@@ -17,7 +17,7 @@
 
 @interface QEntryElement : QLabelElement <UITextInputTraits> {
 
-@private
+@protected
     NSString *_placeholder;
     NSString *_textValue;
 

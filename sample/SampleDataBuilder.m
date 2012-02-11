@@ -19,6 +19,7 @@
 #import "QRootElement.h"
 #import "QSection.h"
 #import "QDynamicDataSection.h"
+#import "QTextEntryElement.h"
 
 @implementation SampleDataBuilder
 
@@ -41,7 +42,6 @@
 	[subsection	addElement:[[QRadioItemElement alloc] init]];
 	[subsection	addElement:[[QTextElement alloc] init]];
 	[subsection	addElement:[[QWebElement alloc] init]];
-	
 	return subForm;
 }
 
@@ -148,7 +148,8 @@
 
     QLabelElement *element1 = [[QLabelElement alloc] initWithTitle:@"Label" Value:@"element"];
 
-
+    QTextEntryElement * textEntryElement = [[QTextEntryElement alloc] initWithText:@"This is a test"];
+    
     QRadioElement *radioElement = [[QRadioElement alloc] initWithItems:[[NSArray alloc] initWithObjects:@"Option 1", @"Option 2", @"Option 3", nil] selected:0 title:@"Radio"];
 	radioElement.key = @"radio1";
 
@@ -161,6 +162,7 @@
 	
     controls.footer = @"More controls will be added.";
     [controls addElement:element1];
+    [controls addElement:textEntryElement];
 
     [controls addElement:radioElement];
     [controls addElement:entryElement];
