@@ -34,6 +34,7 @@
 #import "QRadioElement.h"
 #import "QRadioItemElement.h"
 #import "QTextElement.h"
+#import "QTextEntryElement.h"
 #import "QWebElement.h"
 #import "QDecimalElement.h"
 #import "QSortingSection.h"
