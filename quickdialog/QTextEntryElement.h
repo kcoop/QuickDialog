@@ -8,7 +8,7 @@
 
 #import "QElement.h"
 
-@interface QTextEntryElement : QEntryElement <UITextViewDelegate>{
+@interface QTextEntryElement : QEntryElement{
     @protected
     BOOL _showCharacterCounter;
     int _maxCharacters;

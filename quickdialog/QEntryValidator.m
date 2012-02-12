@@ -39,7 +39,7 @@
     }
     
     if (_regexPattern) {
-        NSPredicate *test = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", _regexPattern];
+        NSPredicate *test = [NSPredicate predicateWithFormat:@"SELF MATCHES[c] %@", _regexPattern];
         if (![test evaluateWithObject: trimmed]) {
             return _regexFailedText;
         }

@@ -159,6 +159,7 @@
 }
 
 - (void)textViewDidChange:(UITextView *)textView{
+    _entryElement.textValue = textView.text;
     [self updateCounterLabel:textView];
 }
 

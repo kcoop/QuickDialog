@@ -163,9 +163,22 @@
     if (_resizeWhenKeyboardPresented) {
       [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resizeForKeyboard:) name:UIKeyboardWillShowNotification object:nil];
       [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resizeForKeyboard:) name:UIKeyboardWillHideNotification object:nil];
+        
+#ifdef __IPHONE_5_0
+        float version = [[[UIDevice currentDevice] systemVersion] floatValue];
+        if (version >= 5.0) {
+            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resizeForKeyboard:) name:UIKeyboardWillChangeFrameNotification object:nil];
+        }
+#endif
     } else {
       [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
       [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+#ifdef __IPHONE_5_0
+        float version = [[[UIDevice currentDevice] systemVersion] floatValue];
+        if (version >= 5.0) {
+            [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillChangeFrameNotification object:nil];
+        }
+#endif
     }
   }
 }
@@ -173,6 +186,12 @@
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+#ifdef __IPHONE_5_0
+    float version = [[[UIDevice currentDevice] systemVersion] floatValue];
+    if (version >= 5.0) {
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillChangeFrameNotification object:nil];
+    }
+#endif
 }
 
 
