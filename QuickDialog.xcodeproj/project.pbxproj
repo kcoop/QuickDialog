@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2B4D9DB314E661EE007937E3 /* QTextEntryElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B22FC3914E65AFF0023CF17 /* QTextEntryElement.m */; };
-		2B4D9DB414E661F2007937E3 /* QTextEntryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B22FC3B14E65AFF0023CF17 /* QTextEntryTableViewCell.m */; };
 		2C542394145ADEBD0026A152 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D80B0E3913E052DF00FA85CA /* Foundation.framework */; };
 		2C54239F145ADF2B0026A152 /* QuickDialog.h in Headers */ = {isa = PBXBuildFile; fileRef = D8F180E813F0599A009B0C9E /* QuickDialog.h */; settings = {ATTRIBUTES = (); }; };
 		2C5423A1145ADF2B0026A152 /* QDecimalTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D8F180E813F0599A009B0C9A /* QDecimalTableViewCell.m */; };
@@ -139,10 +137,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		2B22FC3814E65AFF0023CF17 /* QTextEntryElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = QTextEntryElement.h; path = quickdialog/QTextEntryElement.h; sourceTree = SOURCE_ROOT; };
-		2B22FC3914E65AFF0023CF17 /* QTextEntryElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = QTextEntryElement.m; path = quickdialog/QTextEntryElement.m; sourceTree = SOURCE_ROOT; };
-		2B22FC3A14E65AFF0023CF17 /* QTextEntryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = QTextEntryTableViewCell.h; path = quickdialog/QTextEntryTableViewCell.h; sourceTree = SOURCE_ROOT; };
-		2B22FC3B14E65AFF0023CF17 /* QTextEntryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = QTextEntryTableViewCell.m; path = quickdialog/QTextEntryTableViewCell.m; sourceTree = SOURCE_ROOT; };
 		2C542393145ADEBD0026A152 /* libQuickDialog.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libQuickDialog.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		2CE450A9145ADFAC00B77D0E /* libQuickDialog-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "libQuickDialog-Prefix.pch"; path = "libQuickDialog/libQuickDialog-Prefix.pch"; sourceTree = SOURCE_ROOT; };
 		B13B340414E450B8005EFB7F /* QValidator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = QValidator.h; path = quickdialog/QValidator.h; sourceTree = SOURCE_ROOT; };
@@ -487,10 +481,6 @@
 				D811F8B913EC905B00E3922B /* QSortingSection.m */,
 				D811F8BA13EC905B00E3922B /* QTextElement.h */,
 				D811F8BB13EC905B00E3922B /* QTextElement.m */,
-				2B22FC3814E65AFF0023CF17 /* QTextEntryElement.h */,
-				2B22FC3914E65AFF0023CF17 /* QTextEntryElement.m */,
-				2B22FC3A14E65AFF0023CF17 /* QTextEntryTableViewCell.h */,
-				2B22FC3B14E65AFF0023CF17 /* QTextEntryTableViewCell.m */,
 				D811F8BC13EC905B00E3922B /* QWebElement.h */,
 				D811F8BD13EC905B00E3922B /* QWebElement.m */,
 				D811F8BE13EC905B00E3922B /* QWebViewController.h */,
@@ -666,8 +656,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2B4D9DB414E661F2007937E3 /* QTextEntryTableViewCell.m in Sources */,
-				2B4D9DB314E661EE007937E3 /* QTextEntryElement.m in Sources */,
 				2C5423A1145ADF2B0026A152 /* QDecimalTableViewCell.m in Sources */,
 				2C5423A3145ADF2B0026A152 /* QDecimalElement.m in Sources */,
 				2C5423A5145ADF2B0026A152 /* QBadgeElement.m in Sources */,
