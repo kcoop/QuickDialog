@@ -33,7 +33,9 @@
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
     cell.textLabel.text = _title;
+    cell.textLabel.backgroundColor = [UIColor clearColor];
     cell.detailTextLabel.text = [_value description];
+    cell.detailTextLabel.backgroundColor = [UIColor clearColor];
     cell.imageView.image = _image;
     cell.accessoryType = self.sections!= nil || self.controllerAction!=nil ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
     cell.selectionStyle = self.sections!= nil || self.controllerAction!=nil ? UITableViewCellSelectionStyleBlue: UITableViewCellSelectionStyleNone;
