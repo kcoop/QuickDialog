@@ -12,21 +12,18 @@
 // permissions and limitations under the License.
 //
 
-
-#import "QuickDialogTableDelegate.h"
-#import "QuickDialogController.h"
-#import "QElement.h"
-#import "QSection.h"
-#import "QSortingSection.h"
-#import "QRootElement.h"
-#import "QuickDialogTableView.h"
-
-
 @implementation QuickDialogTableDelegate
 
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     return indexPath;
+}
+
+- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
+    QSection *section = [_tableView.root getSectionForIndex:indexPath.section];
+    QElement * element = [section.elements objectAtIndex:(NSUInteger) indexPath.row];
+
+    [element selectedAccessory:_tableView controller:_tableView.controller indexPath:indexPath];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -44,12 +41,14 @@
     return self;
 }
 
+
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return UITableViewCellEditingStyleNone;
+    QSection *section = [_tableView.root getSectionForIndex:indexPath.section];
+    return section.canDeleteRows ? UITableViewCellEditingStyleDelete : UITableViewCellEditingStyleNone;
 }
 
 - (BOOL)tableView:(UITableView *)tableView shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath {
-    return NO;
+    return YES;
 }
 - (NSIndexPath *)tableView:(UITableView *)tableView targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath
 {
@@ -74,7 +73,27 @@
     if (section.headerView!=nil)
             return section.headerView.frame.size.height;
 
-    return section.title == NULL? 0 : _tableView.root.grouped? 44 :  22;
+    if (section.title==nil)
+        return 0;
+
+    if (!_tableView.root.grouped)
+        return 22.f;
+
+    CGFloat stringTitleHeight = 0;
+
+    if (section.title != nil) {
+        CGFloat maxWidth = [UIScreen mainScreen].bounds.size.width - 20;
+        CGFloat maxHeight = 9999;
+        CGSize maximumLabelSize = CGSizeMake(maxWidth,maxHeight);
+        CGSize expectedLabelSize = [section.title sizeWithFont:[UIFont systemFontOfSize:[UIFont labelFontSize]]
+                                              constrainedToSize:maximumLabelSize
+                                                  lineBreakMode:UILineBreakModeWordWrap];
+
+        stringTitleHeight = expectedLabelSize.height+23.f;
+    }
+
+
+    return section.title != NULL? stringTitleHeight : 0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)index {
@@ -90,17 +109,25 @@
     CGFloat stringFooterHeight = 28.0;
 
     if (section.footer != nil) {
-        CGFloat maxWidth = [UIScreen mainScreen].bounds.size.width - 50;
+        CGFloat maxWidth = [UIScreen mainScreen].bounds.size.width - 20;
         CGFloat maxHeight = 9999;
         CGSize maximumLabelSize = CGSizeMake(maxWidth,maxHeight);
         CGSize expectedLabelSize = [section.footer sizeWithFont:[UIFont systemFontOfSize:[UIFont labelFontSize]]
                                               constrainedToSize:maximumLabelSize
                                                   lineBreakMode:UILineBreakModeWordWrap];
 
-        stringFooterHeight = expectedLabelSize.height;
+        stringFooterHeight = expectedLabelSize.height+5;
     }
 
     return section.footer != NULL? stringFooterHeight : 0;
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    QSection *section = [_tableView.root getSectionForIndex:indexPath.section];
+    QElement *element = [section.elements objectAtIndex:(NSUInteger) indexPath.row];
+    if (_tableView.styleProvider != nil) {
+        [_tableView.styleProvider cell:cell willAppearForElement:element atIndexPath:indexPath];
+    }
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)index {

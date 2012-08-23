@@ -12,6 +12,7 @@
 // permissions and limitations under the License.
 //
 
+#import <CoreGraphics/CoreGraphics.h>
 #import "QTextElement.h"
 
 @implementation QTextElement
@@ -35,38 +36,34 @@
 }
 
 - (UITableViewCell *)getCellForTableView:(QuickDialogTableView *)tableView controller:(QuickDialogController *)controller {
-
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"QuickfromTextElement"];
-    if (cell==nil){
-        cell = [[QTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"QuickfromTextElement"];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    
-        cell.textLabel.font = _font;
-        cell.textLabel.lineBreakMode = UILineBreakModeWordWrap;
-        cell.textLabel.numberOfLines = 0;
-        if([cell.textLabel respondsToSelector:@selector(textLabel:)]) {
-            cell.textLabel.textColor = _color;
-        }
-        cell.textLabel.text = _text;
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[NSString stringWithFormat:@"QuickformText"]];
+    if (cell == nil){
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"QuickformText"];
     }
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    cell.detailTextLabel.lineBreakMode = UILineBreakModeWordWrap;
+    cell.detailTextLabel.numberOfLines = 0;
+
+    cell.textLabel.adjustsFontSizeToFitWidth = YES;
+    cell.textLabel.text = self.title;
+    cell.detailTextLabel.font = _font;
+    cell.detailTextLabel.textColor = _color;
+    cell.detailTextLabel.text = _text;
+    
     return cell;
 }
 
-- (void)selected:(QuickDialogTableView *)tableView controller:(QuickDialogController *)controller indexPath:(NSIndexPath *)indexPath {
-    if (self.onSelected) {
-        self.onSelected();
-    }
-    
-}
 
 - (CGFloat)getRowHeightForTableView:(QuickDialogTableView *)tableView {
 
     if (_text==nil || _text == @""){
         return [super getRowHeightForTableView:tableView];
     }
-    CGSize constraint = CGSizeMake(280, 20000);
+    CGSize constraint = CGSizeMake(tableView.frame.size.width-(tableView.root.grouped ? 40.f : 20.f), 20000);
     CGSize  size= [_text sizeWithFont:_font constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
 	CGFloat predictedHeight = size.height + 20.0f;
+    if (self.title!=nil)
+        predictedHeight+=30;
 	return (_height >= predictedHeight) ? _height : predictedHeight;
 }
 

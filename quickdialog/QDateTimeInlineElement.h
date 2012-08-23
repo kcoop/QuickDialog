@@ -23,14 +23,22 @@
 }
 
 @property(nonatomic, retain) NSDate *dateValue;
+@property(nonatomic, assign) NSNumber *ticksValue;
 
 @property (assign) UIDatePickerMode mode;
 
 @property(nonatomic) BOOL centerLabel;
 
+@property(nonatomic, strong) NSDate *maximumDate;
+
+@property(nonatomic, strong) NSDate *minimumDate;
+
+
 - (QDateTimeInlineElement *)initWithDate:(NSDate *)date;
 
 - (QDateTimeInlineElement *)initWithTitle:(NSString *)string date:(NSDate *)date;
 
+
+@property(nonatomic, copy) void (^onValueChanged)(void);
 
 @end

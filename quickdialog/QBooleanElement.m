@@ -12,6 +12,8 @@
 // permissions and limitations under the License.
 //
 
+#import <objc/message.h>
+
 @implementation QBooleanElement {
     __unsafe_unretained QuickDialogController *_controller;
 }
@@ -28,8 +30,8 @@
 
 - (QBooleanElement *)initWithTitle:(NSString *)title BoolValue:(BOOL)value {
     self = [self initWithTitle:title Value:nil];
-    _boolValue = value;
-    _enabled = YES;
+    self.boolValue = value;
+    self.enabled = YES;
     return self;
 }
 
@@ -48,18 +50,19 @@
     _controller = controller;
     if ((_onImage==nil) && (_offImage==nil))  {
         UISwitch *boolSwitch = [[UISwitch alloc] init];
-        boolSwitch.on = _boolValue;
-        boolSwitch.enabled = _enabled;
+        boolSwitch.on = self.boolValue;
+        boolSwitch.enabled = self.enabled;
         [boolSwitch addTarget:self action:@selector(switched:) forControlEvents:UIControlEventValueChanged];
         cell.accessoryView = boolSwitch;
 
     } else {
         UIButton *boolButton = [[UIButton alloc] init];
-        [boolButton setImage:self.offImage forState:UIControlStateNormal];
-        [boolButton setImage:self.onImage forState:UIControlStateSelected];
+        [boolButton setImage:self.offImage forState: UIControlStateNormal];
+        [boolButton setImage:self.onImage forState: UIControlStateSelected];
+        [boolButton setImage:self.onImage forState: UIControlStateSelected | UIControlStateDisabled];
         cell.accessoryView = boolButton;
-        boolButton.enabled = _enabled;
-        boolButton.selected = _boolValue;
+        boolButton.enabled = self.enabled;
+        boolButton.selected = self.boolValue;
         [boolButton sizeToFit];
         [boolButton addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -68,32 +71,43 @@
 
 - (void)selected:(QuickDialogTableView *)tableView controller:(QuickDialogController *)controller indexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    _boolValue = !_boolValue;
-    if ([cell.accessoryView class] == [UIImageView class]){
-        ((UIImageView *)cell.accessoryView).image =  _boolValue ? _onImage : _offImage;
+    self.boolValue = !self.boolValue;
+    if ([cell.accessoryView class] == [UIButton class]) {
+        ((UIButton *)cell.accessoryView).selected = self.boolValue;
     }
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    if (_sections!=nil)
-        [self handleElementSelected:controller];
+    else if ([cell.accessoryView class] == [UISwitch class]) {
+        [((UISwitch *)cell.accessoryView) setOn:self.boolValue animated:YES];
+    }
+
+    if (self.controllerAction==nil)
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    [self handleElementSelected:controller];
 }
 
 - (void)buttonPressed:(UIButton *)boolButton {
-    _boolValue = !boolButton.selected;
+    self.boolValue = !boolButton.selected;
     boolButton.selected = _boolValue;
-    if (_controller!=nil && self.controllerAction!=nil)
-        [self handleElementSelected:_controller];
+    if (_controller!=nil && self.controllerAccessoryAction!=nil) {
+        SEL selector = NSSelectorFromString(self.controllerAccessoryAction);
+        if ([_controller respondsToSelector:selector]) {
+            objc_msgSend(_controller,selector, self);
+        }  else {
+            NSLog(@"No method '%@' was found on controller %@", self.controllerAccessoryAction, [_controller class]);
+        }
+    }
 }
 
 - (void)switched:(id)boolSwitch {
-    _boolValue = ((UISwitch *)boolSwitch).on;
-    if (_controller!=nil && self.controllerAction!=nil)
+    self.boolValue = ((UISwitch *)boolSwitch).on;
+    if ((_controller != nil && self.controllerAction != nil) || _onSelected != nil) {
         [self handleElementSelected:_controller];
+    }
 }
 
 - (void)fetchValueIntoObject:(id)obj {
 	if (_key==nil)
 		return;
-    [obj setValue:[NSNumber numberWithBool:_boolValue] forKey:_key];
+    [obj setValue:[NSNumber numberWithBool:self.boolValue] forKey:_key];
 }
 
 

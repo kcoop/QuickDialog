@@ -31,11 +31,8 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     QSection *section = [_tableView.root getSectionForIndex:indexPath.section];
-    QElement * element = [section.elements objectAtIndex:(NSUInteger) indexPath.row];
+    QElement *element = [section.elements objectAtIndex:(NSUInteger) indexPath.row];
     UITableViewCell *cell = [element getCellForTableView:(QuickDialogTableView *) tableView controller:_tableView.controller];
-    if (_tableView.styleProvider!=nil){
-        [_tableView.styleProvider cell:cell willAppearForElement:element atIndexPath:indexPath];
-    }
     return cell;
 }
 
@@ -55,13 +52,25 @@
     return [[_tableView.root getSectionForIndex:indexPath.section] isKindOfClass:[QSortingSection class]];
 }
 
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    QSortingSection *section = ((QSortingSection *) [_tableView.root.sections objectAtIndex:(NSUInteger) indexPath.section]);
+    if ([section removeElementForRow:indexPath.row]){
+        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    }
+}
+
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath {
     QSortingSection *section = ((QSortingSection *) [_tableView.root.sections objectAtIndex:(NSUInteger) sourceIndexPath.section]);
     [section moveElementFromRow:(NSUInteger) sourceIndexPath.row toRow:(NSUInteger) destinationIndexPath.row];
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    return [[_tableView.root getSectionForIndex:indexPath.section] isKindOfClass:[QSortingSection class]];
+    QSection  *section = [_tableView.root.sections objectAtIndex:(NSUInteger) indexPath.section];
+    if ([section isKindOfClass:[QSortingSection class]]){
+        return ([(QSortingSection *) section canRemoveElementForRow:indexPath.row]);
+    }
+    return tableView.editing;
 }
 
 @end

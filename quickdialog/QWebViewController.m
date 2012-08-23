@@ -33,7 +33,7 @@
     if (self!=nil){
         _webView = [[UIWebView alloc] init];
         _webView.delegate = self;
-        _webView.scalesPageToFit = YES;        
+        _webView.scalesPageToFit = YES;
         _url = url;
         self.view = _webView;
         
@@ -44,6 +44,8 @@
         
         _btBack.enabled = NO;
         _btForward.enabled = NO;
+
+        self.hidesBottomBarWhenPushed = YES;
     }
     return self;
 }
@@ -81,7 +83,6 @@
     [_webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:_url]]];
     _previousToolbarState = self.navigationController.toolbarHidden;
     self.navigationController.toolbarHidden = NO;
-    
 
     UIBarButtonItem *spacer1 = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
     spacer1.width = 30;
@@ -123,8 +124,8 @@
     if (error.code==-999)
         return;
     self.navigationItem.rightBarButtonItem = nil;
-    self.title = @"Error";
-    [_webView loadHTMLString:[NSString stringWithFormat:@"<html><font size=+5>An error occurred:<br>%@</font></html>", [error localizedDescription]] baseURL:nil];
+    self.navigationItem.title = @"Error";
+    [_webView loadHTMLString:[NSString stringWithFormat:@"<html style='margin:2em'><p><font size=+5>Could not open page %@.</font></p><br/><p><font size=+5>%@</font></p></html>",_url, [error localizedDescription]] baseURL:nil];
 }
 
 

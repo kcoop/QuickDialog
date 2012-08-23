@@ -15,7 +15,7 @@
 
 #import "QElement.h"
 
-@interface QTextElement : QElement {
+@interface QTextElement : QRootElement {
 
 @protected
     NSString *_text;

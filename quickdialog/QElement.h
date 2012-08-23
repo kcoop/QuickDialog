@@ -13,6 +13,7 @@
 //
 #import "QSection.h"
 #import "QValidator.h"
+#import "QTableViewCell.h"
 
 @class QuickDialogTableView;
 @class QuickDialogController;
@@ -30,9 +31,9 @@
     NSString * _controllerAction;
 }
 
-
 @property(nonatomic, copy) void (^onSelected)(void);
 @property(nonatomic, retain) NSString *controllerAction;
+@property(nonatomic, retain) NSString *controllerAccessoryAction;
 
 @property(nonatomic) CGFloat height;
 
@@ -43,12 +44,15 @@
 @property(nonatomic, retain) NSString *bind;
 @property(nonatomic, retain) QValidator *validator;
 
+@property (nonatomic) QLabelingPolicy labelingPolicy;
 
 - (QElement *)initWithKey:(NSString *)key;
 
 - (UITableViewCell *)getCellForTableView:(QuickDialogTableView *)tableView controller:(QuickDialogController *)controller;
 
 - (void)handleElementSelected:(QuickDialogController *)controller;
+
+- (void)selectedAccessory:(QuickDialogTableView *)tableView controller:(QuickDialogController *)controller indexPath:(NSIndexPath *)indexPath;
 
 
 - (void)selected:(QuickDialogTableView *)tableView controller:(QuickDialogController *)controller indexPath:(NSIndexPath *)indexPath;
@@ -60,6 +64,7 @@
 - (void)bindToObject:(id)obj;
 
 -(void)validate:(NSMutableArray *)errors;
+- (void)fetchValueUsingBindingsIntoObject:(id)object;
 
 
 @end

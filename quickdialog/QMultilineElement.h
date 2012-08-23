@@ -12,21 +12,15 @@
 // permissions and limitations under the License.
 //
 
-#import <Foundation/Foundation.h>
-#import "QRootElement.h"
+
+#import "QElement.h"
+#import "QMultilineTextViewController.h"
+
+@interface QMultilineElement : QEntryElement
+
+@property(nonatomic, assign) id< QuickDialogEntryElementDelegate> delegate;
 
 
-@interface QRootElement (Builder)
-
-- (QRootElement *)initWithJSONFile:(NSString *)json andData:(id)data;
-
-- (QRootElement *)initWithJSONFile:(NSString *)jsonPath andDataJSONFile:(NSString *)dataPath;
-
-+ (QRootElement *)rootForJSON:(NSString *)json;
-
-
-- (QRootElement *)initWithJSONFile:(NSString *)jsonPath;
-
-+ (Class)JSONParserClass;
+- (QMultilineElement *)initWithTitle:(NSString *)title value:(NSString *)text;
 
 @end

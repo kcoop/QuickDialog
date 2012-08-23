@@ -24,9 +24,11 @@
     BOOL _hiddenToolbar;
 }
 
-@property(nonatomic, strong) NSString *textValue;
-@property(nonatomic, strong) NSString *placeholder;
-@property(assign) BOOL hiddenToolbar;
+@property (nonatomic, strong) NSString *textValue;
+@property (nonatomic, strong) NSString *placeholder;
+@property (nonatomic, strong) NSString *prefix;
+@property (nonatomic, strong) NSString *suffix;
+@property (assign) BOOL hiddenToolbar;
 
 @property(nonatomic, unsafe_unretained) id<QuickDialogEntryElementDelegate> delegate;
 
@@ -37,8 +39,12 @@
 @property(nonatomic) UIReturnKeyType returnKeyType;                       // default is UIReturnKeyDefault (See note under UIReturnKeyType enum)
 @property(nonatomic) BOOL enablesReturnKeyAutomatically;                  // default is NO (when YES, will automatically disable return key when text widget has zero-length contents, and will automatically enable when text widget has non-zero-length contents)
 @property(nonatomic,getter=isSecureTextEntry) BOOL secureTextEntry;       // default is NO
+@property(nonatomic, assign) BOOL clearsOnBeginEditing;                   // default is NO
+
 
 - (QEntryElement *)init;
-
 - (QEntryElement *)initWithTitle:(NSString *)string Value:(NSString *)param Placeholder:(NSString *)string1;
+
+- (BOOL)canTakeFocus;
+
 @end

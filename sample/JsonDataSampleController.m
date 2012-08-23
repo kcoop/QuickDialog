@@ -31,9 +31,22 @@
     [dataDict setValue:@"Bound from object" forKey:@"sectionTitle"];
     [dataDict setValue:[NSNumber numberWithBool:NO] forKey:@"bool"];
     [dataDict setValue:[NSNumber numberWithFloat:0.9] forKey:@"float"];
+    [dataDict setValue:[NSNumber numberWithFloat:1] forKey:@"radio"];
     [self.root bindToObject:dataDict];
-    [self.quickDialogTableView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0,1)] withRowAnimation:UITableViewRowAnimationFade];
+    [self.quickDialogTableView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0,2)] withRowAnimation:UITableViewRowAnimationFade];
 
+}
+-(void)readValuesFromForm:(QElement *)button {
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    [self.root fetchValueUsingBindingsIntoObject:dict];
+
+    NSString *msg = @"Values:";
+    for (NSString *aKey in dict){
+        msg = [msg stringByAppendingFormat:@"\n- %@: %@", aKey, [dict valueForKey:aKey]];
+    }
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Hello"
+                                                    message:msg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    [alert show];
 }
 
 -(void)handleSetValuesDirectly:(QElement *)button {

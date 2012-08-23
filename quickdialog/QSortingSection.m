@@ -16,16 +16,19 @@
 #import "QSortingSection.h"
 #import "QElement.h"
 
-@implementation QSortingSection
+@implementation QSortingSection {
+
+}
 
 
 @synthesize sortingEnabled = _sortingEnabled;
+@synthesize canDeleteRows = _canDeleteRows;
+
 
 - (QSortingSection *)init {
     self = [super init];
     self.sortingEnabled = YES;
     return self;
-
 }
 
 - (BOOL)needsEditing {
@@ -44,8 +47,16 @@
 }
 
 - (void)moveElementFromRow:(NSUInteger)from toRow:(NSUInteger)to {
-    [self.elements exchangeObjectAtIndex:from withObjectAtIndex:to];
+    [self.elements moveObjectFromIndex:from toIndex:to];
 }
 
+- (BOOL)removeElementForRow:(NSInteger)index {
+    [self.elements removeObjectAtIndex:(NSUInteger) index];
+    return YES;
 
+}
+
+- (BOOL)canRemoveElementForRow:(NSInteger)integer {
+    return YES;
+}
 @end

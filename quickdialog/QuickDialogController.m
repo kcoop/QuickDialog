@@ -79,6 +79,11 @@
     return self;
 }
 
+-(void)setEditing:(BOOL)editing animated:(BOOL)animated {
+    [super setEditing:editing animated:animated];
+    [self.quickDialogTableView setEditing:editing animated:animated];
+}
+
 - (void)setRoot:(QRootElement *)root {
     _root = root;
     self.quickDialogTableView.root = root;
@@ -102,12 +107,16 @@
     }
 }
 
-- (void)popToPreviousRootElement {
+- (void)popToPreviousRootElementOnMainThread {
     if (self.navigationController!=nil){
         [self.navigationController popViewControllerAnimated:YES];
     } else {
         [self dismissModalViewControllerAnimated:YES];
     }
+}
+
+- (void)popToPreviousRootElement {
+    [self performSelectorOnMainThread:@selector(popToPreviousRootElementOnMainThread) withObject:nil waitUntilDone:YES];
 }
 
 - (void)displayViewController:(UIViewController *)newController {
@@ -151,7 +160,8 @@
     [UIView animateWithDuration:animationDuration delay:0 options:animationCurve
         animations:^{
             CGRect keyboardFrame = [self.view convertRect:keyboardEndFrame toView:nil];
-            self.quickDialogTableView.contentInset = UIEdgeInsetsMake(0.0, 0.0,  up ? keyboardFrame.size.height : 0, 0.0);
+            const UIEdgeInsets oldInset = self.quickDialogTableView.contentInset;
+            self.quickDialogTableView.contentInset = UIEdgeInsetsMake(oldInset.top, oldInset.left,  up ? keyboardFrame.size.height : 0, oldInset.right);
         }
         completion:NULL];
 }
@@ -172,19 +182,18 @@
 #endif
     } else {
       [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
-      [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
 #ifdef __IPHONE_5_0
         float version = [[[UIDevice currentDevice] systemVersion] floatValue];
         if (version >= 5.0) {
             [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillChangeFrameNotification object:nil];
         }
 #endif
+      [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
     }
   }
 }
 
 - (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
 #ifdef __IPHONE_5_0
     float version = [[[UIDevice currentDevice] systemVersion] floatValue];
@@ -192,6 +201,7 @@
         [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillChangeFrameNotification object:nil];
     }
 #endif
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
 
 
