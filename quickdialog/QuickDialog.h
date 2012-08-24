@@ -14,12 +14,15 @@
 
 
 #import "QuickDialogController.h"
+#import "QuickDialogWebController.h"
 #import "QuickDialogController+Loading.h"
+#import "QuickDialogController+Helpers.h"
+#import "NSMutableArray+MoveObject.h"
 #import "QuickDialogTableView.h"
 #import "QuickDialogTableDelegate.h"
 
 #import "QTableViewCell.h"
-#import "QRootElement+Builder.h"
+#import "QRootElement+JsonBuilder.h"
 #import "QLoadingElement.h"
 #import "QRootElement.h"
 #import "QLabelElement.h"
@@ -30,9 +33,12 @@
 #import "QEntryTableViewCell.h"
 #import "QDateTimeInlineElement.h"
 #import "QFloatElement.h"
+#import "QPickerElement.h"
 #import "QMapElement.h"
 #import "QRadioElement.h"
 #import "QRadioItemElement.h"
+#import "QPickerElement.h"
+#import "QSelectItemElement.h"
 #import "QTextElement.h"
 #import "QWebElement.h"
 #import "QDecimalElement.h"
@@ -40,6 +46,9 @@
 #import "QDateTimeElement.h"
 #import "QWebViewController.h"
 #import "QBadgeLabel.h"
+#import "QSegmentedElement.h"
+#import "QMultilineTextViewController.h"
+#import "QMultilineElement.h"
 
 #import "QuickDialogStyleProvider.h"
 #import "QuickDialogEntryElementDelegate.h"
@@ -48,3 +57,12 @@
 
 #import "QValidator.h"
 #import "QEntryValidator.h"
+#import "QuickDialogController+Loading.h"
+
+#import "QAutoEntryElement.h"
+#import "QAutoEntryTableViewCell.h"
+#import "QDateEntryTableViewCell.h"
+
+#import "QRootBuilder.h"
+
+#import "QTextField.h"

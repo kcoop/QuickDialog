@@ -10,11 +10,15 @@
     self = [super init];
     if (self) {
         _emptyMessage = @"Empty";
+        [self addElement:[[QLoadingElement alloc] init]];
     }
     return self;
 }
 
 - (void)bindToObject:(id)data {
+
+    [self.elements removeAllObjects];
+
     [super bindToObject:data];
     
     if (self.elements.count>0) //elements exist
@@ -28,10 +32,10 @@
         NSString *valueName = [((NSString *) [bindingParams objectAtIndex:1]) stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         
         if ([propName isEqualToString:@"iterate"]) {
-            
             collection = [data valueForKey:valueName];
         }
     }
+
     
     if (collection==nil)
         [self addElement:[[QLoadingElement alloc] init]];

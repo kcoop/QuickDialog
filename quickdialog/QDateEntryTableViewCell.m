@@ -16,6 +16,8 @@
 #import "QDateEntryTableViewCell.h"
 #import "QDateTimeInlineElement.h"
 
+UIDatePicker *QDATEENTRY_GLOBAL_PICKER;
+
 @implementation QDateEntryTableViewCell
 
 @synthesize pickerView = _pickerView;
@@ -26,22 +28,44 @@
     self = [self initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"QuickformDateTimeInlineElement"];
     if (self!=nil){
         [self createSubviews];
-		self.selectionStyle = UITableViewCellSelectionStyleGray;
+		self.selectionStyle = UITableViewCellSelectionStyleBlue;
     }
     return self;
+}
+
++ (UIDatePicker *)getPickerForDate {
+    QDATEENTRY_GLOBAL_PICKER = [[UIDatePicker alloc] init];
+    return QDATEENTRY_GLOBAL_PICKER;
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField {
+    [super textFieldDidEndEditing:textField];
+    self.selected = NO;
+    [_pickerView removeTarget:self action:@selector(dateChanged:) forControlEvents:UIControlEventValueChanged];
+    _pickerView = nil;
+
+}
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField {
+    QDateTimeInlineElement *const element = ((QDateTimeInlineElement *) _entryElement);
+
+    _pickerView = [QDateEntryTableViewCell getPickerForDate];
+    [_pickerView sizeToFit];
+    _textField.inputView = _pickerView;
+    [_pickerView addTarget:self action:@selector(dateChanged:) forControlEvents:UIControlEventValueChanged];
+    _pickerView.datePickerMode = element.mode;
+    _pickerView.maximumDate = element.maximumDate;
+    _pickerView.minimumDate = element.minimumDate;
+    if (element.dateValue!=nil)
+        _pickerView.date = element.dateValue;
+
+    [super textFieldDidBeginEditing:textField];
+    self.selected = YES;
 }
 
 - (void)createSubviews {
     [super createSubviews];
     _textField.hidden = YES;
-
-    _pickerView = [[UIDatePicker alloc] init];
-    [_pickerView sizeToFit];
-    _pickerView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
-    [_pickerView addTarget:self action:@selector(dateChanged:)
-              forControlEvents:UIControlEventValueChanged];
-
-    _textField.inputView = _pickerView;
 
     self.centeredLabel = [[UILabel alloc] init];
     self.centeredLabel.textColor = [UIColor colorWithRed:0.243 green:0.306 blue:0.435 alpha:1.0];
@@ -54,12 +78,15 @@
 }
 
 - (void) dateChanged:(id)sender{
-    ((QDateTimeInlineElement *)  _entryElement).dateValue = _pickerView.date;
+    QDateTimeInlineElement *const element = ((QDateTimeInlineElement *) _entryElement);
+    element.dateValue = _pickerView.date;
     [self prepareForElement:_entryElement inTableView:_quickformTableView];
+    if (element.onValueChanged!=nil)
+        element.onValueChanged();
+
 }
 
 - (void)prepareForElement:(QEntryElement *)element inTableView:(QuickDialogTableView *)tableView {
-    QDateTimeInlineElement *entry = (QDateTimeInlineElement *)element;
     [super prepareForElement:element inTableView:tableView];
 
     QDateTimeInlineElement *dateElement = ((QDateTimeInlineElement *) element);
@@ -83,27 +110,21 @@
             [dateFormatter setTimeStyle:NSDateFormatterShortStyle];
 			break;
     }
-	
-    if (!entry.centerLabel){
+
+    if (!dateElement.centerLabel){
 		self.textLabel.text = element.title;
-        self.selectionStyle = UITableViewCellSelectionStyleNone;
         self.centeredLabel.text = nil;
 		self.detailTextLabel.text = [dateFormatter stringFromDate:dateElement.dateValue];
 		
     } else {
-        self.selectionStyle = UITableViewCellSelectionStyleBlue;
         self.textLabel.text = nil;
 		self.centeredLabel.text = [dateFormatter stringFromDate:dateElement.dateValue];
     }
-	
+
 	_textField.text = [dateFormatter stringFromDate:dateElement.dateValue];
-    _pickerView.datePickerMode = dateElement.mode;
-    if (dateElement.dateValue!=nil)
-        _pickerView.date = dateElement.dateValue;
     _textField.placeholder = dateElement.placeholder;
 
-    _textField.inputAccessoryView.hidden = entry.hiddenToolbar;
+    _textField.inputAccessoryView.hidden = dateElement.hiddenToolbar;
 }
-
 
 @end

@@ -16,6 +16,8 @@
 
 @synthesize textValue = _textValue;
 @synthesize placeholder = _placeholder;
+@synthesize prefix = _prefix;
+@synthesize suffix = _suffix;
 @synthesize hiddenToolbar = _hiddenToolbar;
 
 @synthesize delegate = _delegate;
@@ -50,7 +52,10 @@
     if (cell==nil){
         cell = [[QEntryTableViewCell alloc] init];
     }
-    
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    cell.textField.enabled = YES;
+    cell.textField.userInteractionEnabled = YES;
+    cell.imageView.image = self.image;
     [cell prepareForElement:self inTableView:tableView];
     return cell;
 }
@@ -67,6 +72,9 @@
 	[obj setValue:_textValue forKey:_key];
 }
 
+- (BOOL)canTakeFocus {
+    return YES;
+}
 
 #pragma mark - UITextInputTraits
 
@@ -77,5 +85,8 @@
 @synthesize returnKeyType = _returnKeyType;
 @synthesize enablesReturnKeyAutomatically = _enablesReturnKeyAutomatically;
 @synthesize secureTextEntry = _secureTextEntry;
+@synthesize clearsOnBeginEditing = _clearsOnBeginEditing;
+@synthesize accessoryType = _accessoryType;
+
 
 @end

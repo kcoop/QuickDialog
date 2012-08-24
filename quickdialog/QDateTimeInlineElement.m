@@ -12,22 +12,34 @@
 // permissions and limitations under the License.
 //
 
-#import "QDateTimeInlineElement.h"
 #import "QDateEntryTableViewCell.h"
 
-@implementation QDateTimeInlineElement
+@implementation QDateTimeInlineElement {
+@private
+    NSDate *_maximumDate;
+    NSDate *_minimumDate;
+
+    void (^_onValueChanged)();
+
+}
 
 @synthesize dateValue = _dateValue;
 @synthesize mode = _mode;
 @synthesize centerLabel = _centerLabel;
+@synthesize maximumDate = _maximumDate;
+@synthesize minimumDate = _minimumDate;
+@synthesize onValueChanged = _onValueChanged;
+
 
 - (QDateTimeInlineElement *)init {
     self = [super init];
+    _dateValue = [NSDate date];
     return self;
 }
 
 - (QDateTimeInlineElement *)initWithKey:(NSString *)key {
     self = [super initWithKey:key];
+    _dateValue = [NSDate date];
     return self;
 }
 
@@ -40,9 +52,17 @@
     return self;
 }
 
+
+- (void)setTicksValue:(NSNumber *)ticks {
+    self.dateValue = [NSDate dateWithTimeIntervalSince1970:ticks.doubleValue];
+}
+
+-(NSNumber *)ticksValue {
+    return [NSNumber numberWithDouble:[self.dateValue timeIntervalSince1970]];
+}
+
 - (QDateTimeInlineElement *)initWithDate:(NSDate *)date {
     return [self initWithTitle:nil date:date];
-
 }
 
 - (UITableViewCell *)getCellForTableView:(QuickDialogTableView *)tableView controller:(QuickDialogController *)controller {
@@ -52,6 +72,8 @@
         cell = [[QDateEntryTableViewCell alloc] init];
     }
     [cell prepareForElement:self inTableView:tableView];
+    cell.imageView.image = self.image;
+    cell.selectionStyle = UITableViewCellSelectionStyleBlue ;
     return cell;
 
 }
@@ -61,6 +83,5 @@
 		return;
     [obj setValue:_dateValue forKey:_key];
 }
-
 
 @end

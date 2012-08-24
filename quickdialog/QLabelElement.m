@@ -15,10 +15,16 @@
 
 #import "QLabelElement.h"
 
-@implementation QLabelElement
+@implementation QLabelElement {
+@private
+    UITableViewCellAccessoryType _accessoryType;
+}
+
 
 @synthesize image = _image;
 @synthesize value = _value;
+@synthesize accessoryType = _accessoryType;
+
 
 - (QLabelElement *)initWithTitle:(NSString *)title Value:(id)value {
    self = [super init];
@@ -27,9 +33,18 @@
     return self;
 }
 
+-(void)setImageNamed:(NSString *)name {
+    self.image = [UIImage imageNamed:name];
+}
+
+- (NSString *)imageNamed {
+    return nil;
+}
+
+
 - (UITableViewCell *)getCellForTableView:(QuickDialogTableView *)tableView controller:(QuickDialogController *)controller {
-    UITableViewCell *cell = [super getCellForTableView:tableView controller:controller];
-    cell.accessoryType = UITableViewCellAccessoryNone;
+    QTableViewCell *cell = (QTableViewCell *) [super getCellForTableView:tableView controller:controller];
+    cell.accessoryType = _accessoryType== (int) nil ? UITableViewCellAccessoryNone : _accessoryType;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
     cell.textLabel.text = _title;
@@ -37,7 +52,7 @@
     cell.detailTextLabel.text = [_value description];
     cell.detailTextLabel.backgroundColor = [UIColor clearColor];
     cell.imageView.image = _image;
-    cell.accessoryType = self.sections!= nil || self.controllerAction!=nil ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
+    cell.accessoryType = self.sections!= nil || self.controllerAction!=nil ? (_accessoryType != (int) nil ? _accessoryType : UITableViewCellAccessoryDisclosureIndicator) : UITableViewCellAccessoryNone;
     cell.selectionStyle = self.sections!= nil || self.controllerAction!=nil ? UITableViewCellSelectionStyleBlue: UITableViewCellSelectionStyleNone;
 
     return cell;

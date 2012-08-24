@@ -12,6 +12,7 @@
 // permissions and limitations under the License.
 //
 
+
 NSDictionary *QRootBuilderStringToTypeConversionDict;
 
 @interface QRootBuilder ()
@@ -23,17 +24,39 @@ NSDictionary *QRootBuilderStringToTypeConversionDict;
 
 @implementation QRootBuilder
 
-+ (void)trySetProperty:(NSString *)propertyName onObject:(id)target withValue:(id)value {
++ (void)trySetProperty:(NSString *)propertyName onObject:(id)target withValue:(id)value  localized:(BOOL)shouldLocalize{
+    shouldLocalize = shouldLocalize && ![propertyName isEqualToString:@"bind"] && ![propertyName isEqualToString:@"type"];
     if ([value isKindOfClass:[NSString class]]) {
-        [target setValue:value forKeyPath:propertyName];
         if ([QRootBuilderStringToTypeConversionDict objectForKey:propertyName]!=nil) {
             [target setValue:[[QRootBuilderStringToTypeConversionDict objectForKey:propertyName] objectForKey:value] forKeyPath:propertyName];
+        } else {
+            [target setValue:shouldLocalize ? QTranslate(value) : value forKeyPath:propertyName];
         }
     } else if ([value isKindOfClass:[NSNumber class]]){
         [target setValue:value forKeyPath:propertyName];
     } else if ([value isKindOfClass:[NSArray class]]) {
-        [target setValue:value forKeyPath:propertyName];
+
+        NSUInteger i= 0;
+        NSMutableArray * itemsTranslated = [(NSArray *) value mutableCopy];
+
+        if (shouldLocalize){
+            for (id obj in (NSArray *)value){
+                if ([obj isKindOfClass:[NSString class]]){
+                    @try {
+                        [itemsTranslated replaceObjectAtIndex:i withObject:QTranslate(obj)];
+                    }
+                    @catch (NSException * e) {
+                        NSLog(@"Exception: %@", e);
+                    }
+                }
+                i++;
+            }
+        }
+
+        [target setValue:itemsTranslated forKeyPath:propertyName];
     } else if ([value isKindOfClass:[NSDictionary class]]){
+        [target setValue:value forKeyPath:propertyName];
+    } else if ([value isKindOfClass:[NSObject class]]){
         [target setValue:value forKeyPath:propertyName];
     } else if (value == nil){
         [target setValue:nil forKeyPath:propertyName];
@@ -46,7 +69,7 @@ NSDictionary *QRootBuilderStringToTypeConversionDict;
             continue;
 
         id value = [dict valueForKey:key];
-        [QRootBuilder trySetProperty:key onObject:element withValue:value];
+        [QRootBuilder trySetProperty:key onObject:element withValue:value localized:YES];
     }
 }
 
@@ -64,6 +87,17 @@ NSDictionary *QRootBuilderStringToTypeConversionDict;
     return element;
 }
 
+- (QSection *)buildSectionWithObject:(NSDictionary *)obj {
+    QSection *sect = nil;
+    if ([obj valueForKey:[NSString stringWithFormat:@"type"]]!=nil){
+        sect = [[NSClassFromString([obj valueForKey:[NSString stringWithFormat:@"type"]]) alloc] init];
+    } else {
+        sect = [[QSection alloc] init];
+    }
+    [self updateObject:sect withPropertiesFrom:obj];
+    return sect;
+}
+
 - (void)buildSectionWithObject:(id)obj forRoot:(QRootElement *)root {
     QSection *sect = nil;
     if ([obj valueForKey:[NSString stringWithFormat:@"type"]]!=nil){
@@ -78,7 +112,7 @@ NSDictionary *QRootBuilderStringToTypeConversionDict;
     }
 }
 
-- (QRootElement *)buildSectionsWithObject:(id)obj {
+- (QRootElement *)buildWithObject:(id)obj {
     if (QRootBuilderStringToTypeConversionDict ==nil)
         [self initializeMappings];
     
@@ -108,6 +142,13 @@ NSDictionary *QRootBuilderStringToTypeConversionDict;
                                     nil], @"autocorrectionType",
 
                     [[NSDictionary alloc] initWithObjectsAndKeys:
+                                                [NSNumber numberWithInt:UITableViewCellStyleDefault], @"Default",
+                                                        [NSNumber numberWithInt:UITableViewCellStyleSubtitle], @"Subtitle",
+                                                        [NSNumber numberWithInt:UITableViewCellStyleValue2], @"Value2",
+                                                        [NSNumber numberWithInt:UITableViewCellStyleValue1], @"Value1",
+                                                        nil], @"cellStyle",
+
+                    [[NSDictionary alloc] initWithObjectsAndKeys:
                                     [NSNumber numberWithInt:UIKeyboardTypeDefault], @"Default",
                                     [NSNumber numberWithInt:UIKeyboardTypeASCIICapable], @"ASCIICapable",
                                     [NSNumber numberWithInt:UIKeyboardTypeNumbersAndPunctuation], @"NumbersAndPunctuation",
@@ -133,6 +174,20 @@ NSDictionary *QRootBuilderStringToTypeConversionDict;
                                     nil], @"indicatorViewStyle",
 
                     [[NSDictionary alloc] initWithObjectsAndKeys:
+                                                        [NSNumber numberWithInt:UITableViewCellAccessoryDetailDisclosureButton], @"DetailDisclosureButton",
+                                                        [NSNumber numberWithInt:UITableViewCellAccessoryCheckmark], @"Checkmark",
+                                                        [NSNumber numberWithInt:UITableViewCellAccessoryDisclosureIndicator], @"DisclosureIndicator",
+                                                        [NSNumber numberWithInt:UITableViewCellAccessoryNone], @"None",
+                                                        nil], @"accessoryType",
+
+                    [[NSDictionary alloc] initWithObjectsAndKeys:
+                                    [NSNumber numberWithInt:UIDatePickerModeDate], @"Date",
+                                    [NSNumber numberWithInt:UIDatePickerModeTime], @"Time",
+                                    [NSNumber numberWithInt:UIDatePickerModeDateAndTime], @"DateAndTime",
+                                    [NSNumber numberWithInt:UIDatePickerModeCountDownTimer], @"CountDownTimer",
+                                    nil], @"mode",
+
+                    [[NSDictionary alloc] initWithObjectsAndKeys:
                                     [NSNumber numberWithInt:UIReturnKeyDefault], @"Default",
                                     [NSNumber numberWithInt:UIReturnKeyGo], @"Go",
                                     [NSNumber numberWithInt:UIReturnKeyGoogle], @"Google",
@@ -146,6 +201,10 @@ NSDictionary *QRootBuilderStringToTypeConversionDict;
                                     [NSNumber numberWithInt:UIReturnKeyEmergencyCall], @"EmergencyCall",
                                     nil], @"returnKeyType",
 
+                    [[NSDictionary alloc] initWithObjectsAndKeys:
+                                                        [NSNumber numberWithInt:QLabelingPolicyTrimTitle], @"trimTitle",
+                                                        [NSNumber numberWithInt:QLabelingPolicyTrimValue], @"trimValue",
+                                    nil], @"labelingPolicy",
                     nil];
 }
 
