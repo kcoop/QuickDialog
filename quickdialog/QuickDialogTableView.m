@@ -88,7 +88,10 @@
     NSMutableArray *indexes = [[NSMutableArray alloc] init];
     QElement * element = firstElement;
     while (element != nil) {
-        [indexes addObject:[self indexForElement:element]];
+        NSIndexPath *index = [self indexForElement:element];
+        if (index != nil) {
+            [indexes addObject:index];
+        }
         element = va_arg(args, QElement *);
     }
     [self reloadRowsAtIndexPaths:indexes withRowAnimation:UITableViewRowAnimationNone];

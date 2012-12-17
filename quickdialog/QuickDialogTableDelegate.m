@@ -12,6 +12,8 @@
 // permissions and limitations under the License.
 //
 
+#import "UIImageView+QuickDialogTableView.h"
+
 @implementation QuickDialogTableDelegate
 
 
@@ -125,6 +127,24 @@
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     QSection *section = [_tableView.root getSectionForIndex:indexPath.section];
     QElement *element = [section.elements objectAtIndex:(NSUInteger) indexPath.row];
+    
+    QuickDialogTableViewCellPosition cellPosition;
+    if (section.elements.count >= 2) {
+        if (indexPath.row == 0) {
+            cellPosition = kQuickDialogTableViewCellPositionTop;
+        } else if (indexPath.row == section.elements.count - 1) {
+            cellPosition = kQuickDialogTableViewCellPositionBottom;
+        } else {
+            cellPosition = kQuickDialogTableViewCellPositionCenter;
+        }
+    } else {
+        cellPosition = kQuickDialogTableViewCellPositionSingle;
+    }
+    
+    // set the background view
+    cell.backgroundView = [UIImageView backgroundViewAtQuickDialogTableViewPosition:cellPosition forState:kQuickDialogTableViewCellStateNormal];
+    cell.selectedBackgroundView = [UIImageView backgroundViewAtQuickDialogTableViewPosition:cellPosition forState:kQuickDialogTableViewCellStateSelected];
+    
     if (_tableView.styleProvider != nil) {
         [_tableView.styleProvider cell:cell willAppearForElement:element atIndexPath:indexPath];
     }

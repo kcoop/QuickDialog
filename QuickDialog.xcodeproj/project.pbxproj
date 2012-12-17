@@ -43,6 +43,8 @@
 		2C5423DD145ADF2B0026A152 /* QWebElement.m in Sources */ = {isa = PBXBuildFile; fileRef = D811F8BD13EC905B00E3922B /* QWebElement.m */; };
 		2C5423DF145ADF2B0026A152 /* QWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D811F8BF13EC905B00E3922B /* QWebViewController.m */; };
 		2CE450B3145AE43D00B77D0E /* libQuickDialog.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C542393145ADEBD0026A152 /* libQuickDialog.a */; };
+		2D1EC875167F911100262FA2 /* UIImageView+QuickDialogTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D1EC874167F911100262FA2 /* UIImageView+QuickDialogTableView.m */; };
+		2D1EC876167F963200262FA2 /* UIImageView+QuickDialogTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D1EC874167F911100262FA2 /* UIImageView+QuickDialogTableView.m */; };
 		B13B340614E450B9005EFB7F /* QValidator.h in Headers */ = {isa = PBXBuildFile; fileRef = B13B340414E450B8005EFB7F /* QValidator.h */; };
 		B13B340714E450B9005EFB7F /* QValidator.m in Sources */ = {isa = PBXBuildFile; fileRef = B13B340514E450B8005EFB7F /* QValidator.m */; };
 		B13B340B14E451EE005EFB7F /* QEntryValidator.h in Headers */ = {isa = PBXBuildFile; fileRef = B13B340914E451ED005EFB7F /* QEntryValidator.h */; };
@@ -178,6 +180,8 @@
 		194C3FC114EDF0510036C9E7 /* DOAutocompleteTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DOAutocompleteTextField.m; path = quickdialog/DOAutocompleteTextField.m; sourceTree = SOURCE_ROOT; };
 		2C542393145ADEBD0026A152 /* libQuickDialog.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libQuickDialog.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		2CE450A9145ADFAC00B77D0E /* libQuickDialog-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "libQuickDialog-Prefix.pch"; path = "libQuickDialog/libQuickDialog-Prefix.pch"; sourceTree = SOURCE_ROOT; };
+		2D1EC873167F911100262FA2 /* UIImageView+QuickDialogTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImageView+QuickDialogTableView.h"; path = "quickdialog/UIImageView+QuickDialogTableView.h"; sourceTree = SOURCE_ROOT; };
+		2D1EC874167F911100262FA2 /* UIImageView+QuickDialogTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImageView+QuickDialogTableView.m"; path = "quickdialog/UIImageView+QuickDialogTableView.m"; sourceTree = SOURCE_ROOT; };
 		B13B340414E450B8005EFB7F /* QValidator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = QValidator.h; path = quickdialog/QValidator.h; sourceTree = SOURCE_ROOT; };
 		B13B340514E450B8005EFB7F /* QValidator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = QValidator.m; path = quickdialog/QValidator.m; sourceTree = SOURCE_ROOT; };
 		B13B340914E451ED005EFB7F /* QEntryValidator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = QEntryValidator.h; path = quickdialog/QEntryValidator.h; sourceTree = SOURCE_ROOT; };
@@ -485,6 +489,8 @@
 			isa = PBXGroup;
 			children = (
 				F2F23A12152DD45100EB6685 /* QPickerElement */,
+				2D1EC873167F911100262FA2 /* UIImageView+QuickDialogTableView.h */,
+				2D1EC874167F911100262FA2 /* UIImageView+QuickDialogTableView.m */,
 				D894F38815559D34000E3C0F /* NSMutableArray+IMSExtensions.h */,
 				D894F38915559D34000E3C0F /* NSMutableArray+IMSExtensions.m */,
 				F2F23A26152DD48B00EB6688 /* QuickDialogController+Helpers.h */,
@@ -800,6 +806,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2D1EC876167F963200262FA2 /* UIImageView+QuickDialogTableView.m in Sources */,
 				2C5423A1145ADF2B0026A152 /* QDecimalTableViewCell.m in Sources */,
 				2C5423A3145ADF2B0026A152 /* QDecimalElement.m in Sources */,
 				2C5423A5145ADF2B0026A152 /* QBadgeElement.m in Sources */,
@@ -873,6 +880,7 @@
 				D811F90313EC907200E3922B /* ExampleViewController.m in Sources */,
 				D8F180E813F0599A009B0CAC /* JsonDataSampleController.m in Sources */,
 				F209CEE41536AB100043F61C /* PeriodPickerValueParser.m in Sources */,
+				2D1EC875167F911100262FA2 /* UIImageView+QuickDialogTableView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
