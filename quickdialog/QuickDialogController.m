@@ -62,6 +62,8 @@
 - (void)loadView {
     [super loadView];
     self.quickDialogTableView = [[QuickDialogTableView alloc] initWithController:self];
+    self.quickDialogTableView.backgroundView = nil;
+    self.quickDialogTableView.backgroundColor = [UIColor colorWithRed:223.0f/255.0f green:223.0f/255.0f blue:223.0f/255.0f alpha:1.0];
     self.view = self.quickDialogTableView;
 }
 

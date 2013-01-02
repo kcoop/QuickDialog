@@ -48,6 +48,7 @@
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
     cell.textLabel.text = _title;
+    cell.textLabel.highlightedTextColor = [UIColor blackColor];
     cell.textLabel.backgroundColor = [UIColor clearColor];
     cell.detailTextLabel.text = [_value description];
     cell.detailTextLabel.backgroundColor = [UIColor clearColor];

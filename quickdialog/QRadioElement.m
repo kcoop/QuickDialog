@@ -27,6 +27,7 @@
     _sections = nil;
     _internalRadioItemsSection = [[QSection alloc] init];
     _parentSection = _internalRadioItemsSection;
+    _grouped = YES;
 
     [self addSection:_parentSection];
 
@@ -114,6 +115,7 @@
         cell.textField.text = selectedValue;
         cell.imageView.image = nil;
     }
+    cell.textLabel.highlightedTextColor = [UIColor blackColor];
     cell.textField.textAlignment = UITextAlignmentRight;
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     cell.selectionStyle = UITableViewCellSelectionStyleBlue;
